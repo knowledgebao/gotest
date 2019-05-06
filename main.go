@@ -36,4 +36,5 @@ func main() {
 	fmt.Println(getInetge())
 	fmt.Println(getInetge())
 	fmt.Println(getInetge())
+	fmt.Println(getInetge())
 }
