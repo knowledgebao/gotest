@@ -94,6 +94,6 @@ func main() {
 
 	fmt.Println("----------------C Print----------------")
 	fmt.Println("git test rebase")
-	fmt.Println("git test 2")
+	fmt.Println("git test rebase")
 	fmt.Println("git test 3")
 }
