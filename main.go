@@ -1,99 +1,100 @@
 package main
 
-/*
-#include <stdio.h>
-#include <stdlib.h>
-
-char ch = 'M';
-unsigned char uch = 253;
-short st = 233;
-int i = 257;
-long lt = 11112222;
-float f = 3.14;
-double db = 3.15;
-void * p;
-char *str = "const string";
-char str1[64] = "char array";
-
-void printI(void *i)
-{
-    printf("print i = %d\n", (*(int *)i));
-}
-
-struct ImgInfo {
-    char *imgPath;
-    int format;
-    unsigned int width;
-    unsigned int height;
-};
-
-void printStruct(struct ImgInfo *imgInfo)
-{
-    if(!imgInfo) {
-        fprintf(stderr, "imgInfo is null\n");
-        return ;
-    }
-
-    fprintf(stdout, "imgPath = %s\n", imgInfo->imgPath);
-    fprintf(stdout, "format = %d\n", imgInfo->format);
-    fprintf(stdout, "width = %d\n", imgInfo->width);
-}
-
-*/
-import "C"
-
 import (
 	"fmt"
-	"reflect"
-	"unsafe"
+
+	"./cprocess"
 )
 
 func main() {
-	fmt.Println("----------------Go to C---------------")
-	fmt.Println(C.char('Y'))
-	fmt.Printf("%c\n", C.char('Y'))
-	fmt.Println(C.uchar('C'))
-	fmt.Println(C.short(254))
-	fmt.Println(C.long(11112222))
-	var goi int = 2
-	// unsafe.Pointer --> void *
-	cpi := unsafe.Pointer(&goi)
-	C.printI(cpi)
-	fmt.Println("----------------C to Go---------------")
-	fmt.Println(C.ch)
-	fmt.Println(C.uch)
-	fmt.Println(C.st)
-	fmt.Println(C.i)
-	fmt.Println(C.lt)
-	f := float32(C.f)
-	fmt.Println(reflect.TypeOf(f))
-	fmt.Println(C.f)
-	db := float64(C.db)
-	fmt.Println(reflect.TypeOf(db))
-	fmt.Println(C.db)
-	// 区别常量字符串和char数组，转换成Go类型不一样
-	str := C.GoString(C.str)
-	fmt.Println(str)
+	// l := []int{3, 2, 1, 5, 6, 4}
+	// fmt.Println(max_m(l, 2))
+	fmt.Println("main")
+	cprocessDemo()
+	//http.ListenAndServe(":12345", nil)
+}
 
-	fmt.Println(reflect.TypeOf(C.str1))
-	var charray []byte
-	for i := range C.str1 {
-		if C.str1[i] != 0 {
-			charray = append(charray, byte(C.str1[i]))
-		}
+func cprocessDemo() {
+	cprocess.Go2C()
+}
+
+/*
+def heapify(arr, n, i):
+    largest = i # Initialize largest as root
+    l = 2 * i + 1     # left = 2*i + 1
+    r = 2 * i + 2     # right = 2*i + 2
+
+    # See if left child of root exists and is
+    # greater than root
+    if l < n and arr[i] < arr[l]:
+        largest = l
+
+    # See if right child of root exists and is
+    # greater than root
+    if r < n and arr[largest] < arr[r]:
+        largest = r
+
+    # Change root, if needed
+    if largest != i:
+        arr[i],arr[largest] = arr[largest],arr[i] # swap
+
+        # Heapify the root.
+        heapify(arr, n, largest)
+*/
+func heapify(arr []int, n, i int) {
+	largest := i // Initialize largest as root
+	l := 2*i + 1 // left = 2*i + 1
+	r := 2*i + 2 // right = 2*i + 2
+
+	// See if left child of root exists and is
+	// greater than root
+	if l < n && arr[i] < arr[l] {
+		largest = l
 	}
 
-	fmt.Println(charray)
-	fmt.Println(string(charray))
-
-	for i := 0; i < 10; i++ {
-		imgInfo := C.struct_ImgInfo{imgPath: C.CString("../images/xx.jpg"), format: 0, width: 500, height: 400}
-		defer C.free(unsafe.Pointer(imgInfo.imgPath))
-		C.printStruct(&imgInfo)
+	// See if right child of root exists and is
+	// greater than root
+	if r < n && arr[largest] < arr[r] {
+		largest = r
 	}
 
-	fmt.Println("----------------C Print----------------")
-	fmt.Println("git test rebase")
-	fmt.Println("git test rebase")
-	fmt.Println("git test 3")
+	// Change root, if needed
+	if largest != i {
+		arr[i], arr[largest] = arr[largest], arr[i] // swap
+		// Heapify the root.
+		heapify(arr, n, largest)
+	}
+
+}
+
+/*
+def max_m(arr, m):
+    n = len(arr)
+
+    # Build a maxheap.
+    for i in range(n, -1, -1):
+        heapify(arr, n, i)
+
+    # One by one extract elements
+    for i in range(n-1, n-m-1, -1):
+        arr[i], arr[0] = arr[0], arr[i] # swap
+        heapify(arr, i, 0)
+
+	return arr[n-1:n-m-1:-1]
+*/
+
+func max_m(arr []int, m int) []int {
+	n := len(arr)
+
+	// Build a maxheap.
+	for i := n; i > 0; i-- {
+		heapify(arr, n, i)
+	}
+
+	// One by one extract elements
+	for i := n - 1; i > n-m-1; i-- {
+		arr[i], arr[0] = arr[0], arr[i] // swap
+		heapify(arr, i, 0)
+	}
+	return arr[n-m : n]
 }
