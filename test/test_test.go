@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 )
 
 //go test [build/test flags] [packages] [build/test flags & test binary flags]
@@ -16,11 +17,6 @@ import (
 //go test -v Test_test.go "-test.run" TestHello
 func TestHello(t *testing.T) {
 	fmt.Println("TestHello")
-}
-
-//go test -v Test_test.go "-test.run" TestWorld
-func TestWorld(t *testing.T) {
-	fmt.Println("TestWorld")
 }
 
 //命令：go test -run="Test_test.go" -bench="." -benchtime="3s"
@@ -36,4 +32,16 @@ func BenchmarkStringJoin1(b *testing.B) {
 			b.Error("Unexpected result: " + result)
 		}
 	}
+}
+
+func GetReturn() (int, int) {
+	a := 1
+	b := 2
+	return a, b
+}
+
+//go test -v Test_test.go "-test.run" TestWorld
+func TestWorld(t *testing.T) {
+	fmt.Println("TestWorld")
+	time.Sleep(time.Second)
 }

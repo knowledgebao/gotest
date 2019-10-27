@@ -33,6 +33,27 @@ func ReflectDemo() {
 	}
 }
 
+func CheckType(args ...interface{}) {
+	if true {
+		for _, arg := range args {
+			switch arg.(type) {
+			case int:
+				fmt.Println(arg, "is an int value.")
+			case string:
+				fmt.Println(arg, "is a string value.")
+			case int64:
+				fmt.Println(arg, "is an int64 value.")
+			case uintptr:
+				fmt.Println(arg, "is an uintptr value.")
+			case *uintptr:
+				fmt.Println(arg, "is an *uintptr value.")
+			default:
+				fmt.Println(arg, "is an unknown type.")
+			}
+		}
+	}
+}
+
 func TestReflect(t *testing.T) {
 	ReflectDemo()
 }

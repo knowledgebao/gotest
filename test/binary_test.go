@@ -3,15 +3,35 @@ package test
 import (
 	"encoding/binary"
 	"fmt"
+	"reflect"
 	"testing"
+	"unsafe"
 )
 
+/*
+https://blog.csdn.net/ce123_zhouwei/article/details/6971544
+一般操作系统都是小端，而通讯协议是大端的。
+4.1 常见CPU的字节序
+Big Endian : PowerPC、IBM、Sun
+Little Endian : x86、DEC
+ARM既可以工作在大端模式，也可以工作在小端模式。
+*/
 func TestBytes(t *testing.T) {
-	var i64 int64 = 2323
+	var i64 int64 = 2323 //(高)0 0 0 0 0 0 9 19(低) Intel/AMD x86 x64都是小端序
 	var buf64 = make([]byte, 8)
+	//Big-Endian就是高位字节排放在内存的低地址端，低位字节排放在内存的高地址端。
 	binary.BigEndian.PutUint64(buf64, uint64(i64))
-	fmt.Println(buf64)
+	fmt.Println(buf64) //0 0 0 0 0 0 9 19
 	fmt.Println(int64(binary.BigEndian.Uint64(buf64)))
+
+	//Little-Endian就是低位字节排放在内存的低地址端，高位字节排放在内存的高地址端。
+	var buf64S = make([]byte, 8)
+	sh := (*reflect.SliceHeader)((unsafe.Pointer(&buf64S)))
+	sh.Data = (uintptr)(unsafe.Pointer(&i64))
+	sh.Len = 8
+	sh.Cap = 8
+	fmt.Println(buf64S) //19 9 0 0 0 0 0 0
+	fmt.Println(int64(binary.LittleEndian.Uint64(buf64S)))
 
 	var i32 int32 = 800
 	var buf32 = make([]byte, 4)

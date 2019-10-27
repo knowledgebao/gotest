@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"../fileprocess"
 )
 
 var DEPTH = 10
@@ -30,6 +32,7 @@ func walkDir(dirpath string, depth int, f func(string)) {
 	}
 }
 
+//Delete Ext .下载
 func ProcessFun(absFile string) {
 	// fmt.Println(filepath.Base(absFile)) //获取路径中的文件名test.txt
 	if path.Ext(absFile) == ".下载" {
@@ -38,6 +41,13 @@ func ProcessFun(absFile string) {
 		newFileName := paths + filenameOnly
 		os.Rename(absFile, newFileName)
 	}
+}
+
+//
+func DelBeginString(absFile string) {
+	paths, fileName := filepath.Split(absFile)
+	newFileName := fileprocess.ReplaceSpecialExpr(fileName, "OpenCV3.1.0", "^(OpenCV 3.1.0).*?")
+	os.Rename(absFile, paths+newFileName)
 }
 
 func ReadFileALL(filePath string) ([]byte, error) {
@@ -51,7 +61,18 @@ func ReadFileALL(filePath string) ([]byte, error) {
 	}
 	return nil, errors.New("fail")
 }
+
+func TestRename(t *testing.T) {
+	DEPTH = 1
+	walkDir("D:\\work\\knowledgebao\\knowledgebao.github.io\\_posts\\opencv\\图像处理教程配套PPT", 0, DelBeginString)
+}
 func TestReadDir1(t *testing.T) {
 	//walkDir("C:/Users/Administrator/Desktop/websocket/websocket.org Echo Test - Powered by Kaazing_files", 0, ProcessFun)
 	ReadFileALL("C:\\work\\gopath\\src\\git-pd.megvii-inc.com\\ssn\\camera-proxy\\cmd\\service\\output1\\info.json")
+}
+
+func TestWriteAll(t *testing.T) {
+	//walkDir("C:/Users/Administrator/Desktop/websocket/websocket.org Echo Test - Powered by Kaazing_files", 0, ProcessFun)
+	b := []byte{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	ioutil.WriteFile("test.txt", b, os.ModePerm)
 }

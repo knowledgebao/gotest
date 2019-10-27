@@ -41,3 +41,24 @@ EXIT:
 	//close(c1) //panic
 	fmt.Println("end")
 }
+
+func TestReadFromCloesChan(t *testing.T) {
+	c1 := make(chan int, 6)
+	for i := 0; i < 6; i++ {
+		c1 <- i
+	}
+	close(c1)
+EXIT:
+	for {
+		select {
+		case v, ok := <-c1:
+			if !ok {
+				fmt.Println("close")
+				break EXIT
+			} else {
+				fmt.Println(v)
+			}
+		}
+	}
+	fmt.Println("end")
+}

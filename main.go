@@ -3,19 +3,24 @@ package main
 import (
 	"fmt"
 
-	"./cprocess"
+	"./cgoG"
 )
 
 func main() {
-	// l := []int{3, 2, 1, 5, 6, 4}
+	l := []int{3, 2, 1, 5, 6, 4}
+	m := l[2:2]
+	fmt.Println(m)
+
 	// fmt.Println(max_m(l, 2))
 	fmt.Println("main")
-	cprocessDemo()
+	//cprocessDemo()
+	x, y := 1, 2
+	fmt.Println(x, y)
 	//http.ListenAndServe(":12345", nil)
 }
 
 func cprocessDemo() {
-	cprocess.Go2C()
+	cgoG.Go2C()
 }
 
 /*

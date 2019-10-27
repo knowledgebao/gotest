@@ -22,5 +22,6 @@ func FmtDemo() {
 }
 
 func TestFmt(t *testing.T) {
-	FmtDemo()
+	out := fmt.Sprintf("test_%v_%v.jpg", int(100), int(100))
+	fmt.Println(out)
 }
